@@ -37,8 +37,11 @@ public class NoteContoller {
     }
 
     @GetMapping("/public/notes")
-    public ResponseEntity<NotesResponse> getAllNotes (@RequestParam(defaultValue = AppConstants.PAGE_NUMBER) Integer pageNumber, @RequestParam(defaultValue = AppConstants.PAGE_SIZE) Integer pageSize) {
-        NotesResponse response = noteService.getAllNotes(pageNumber, pageSize);
+    public ResponseEntity<NotesResponse> getAllNotes (@RequestParam(defaultValue = AppConstants.PAGE_NUMBER) Integer pageNumber, 
+    @RequestParam(defaultValue = AppConstants.PAGE_SIZE) Integer pageSize,
+    @RequestParam(defaultValue = AppConstants.SORT_DIR) String sortOrder,
+    @RequestParam(defaultValue = AppConstants.SORT_CATEGORY_BY) String sortBy) {
+        NotesResponse response = noteService.getAllNotes(pageNumber, pageSize,sortBy, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     

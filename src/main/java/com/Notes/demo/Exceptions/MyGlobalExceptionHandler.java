@@ -10,6 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.Notes.demo.DTOs.APIResponse;
+
 import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
@@ -31,15 +33,18 @@ public class MyGlobalExceptionHandler {
     }
 
     @ExceptionHandler(APIExceptions.class)
-    public ResponseEntity<String> myAPIException(APIExceptions e){
+    public ResponseEntity<APIResponse> myAPIException(APIExceptions e){
         String message = e.getMessage();
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        APIResponse response = new APIResponse(message, false);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceNotFound.class)
-    public ResponseEntity<String> myResourceNotFound(ResourceNotFound e){
+    public ResponseEntity<APIResponse> myResourceNotFound(ResourceNotFound e){
         String message = e.getMessage();
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        APIResponse response = new APIResponse(message, false);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 

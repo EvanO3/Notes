@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -52,9 +53,12 @@ public class NoteServiceImp implements NoteService {
 
 
     @Override
-    public NotesResponse getAllNotes(Integer pageNumber, Integer pageSize) {
-       
-        PageRequest pageDetails = PageRequest.of(pageNumber, pageSize);
+    public NotesResponse getAllNotes(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        /*Look at the sort order given, if its equal to asc then sortBy ascending order else sort by descending */
+       Sort sortAndOrderBy = sortOrder.equalsIgnoreCase("asc") 
+       ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        PageRequest pageDetails = PageRequest.of(pageNumber, pageSize, sortAndOrderBy);
 
         Page<Note> pageOfNotes = repository.findAll(pageDetails);
         List<Note> notes = pageOfNotes.getContent();

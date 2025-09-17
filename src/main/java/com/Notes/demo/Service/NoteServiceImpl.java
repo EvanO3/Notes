@@ -19,7 +19,7 @@ import com.Notes.demo.Model.Note;
 import com.Notes.demo.Repository.NotesRepository;
 
 @Service
-public class NoteServiceImp implements NoteService {
+public class NoteServiceImpl implements NoteService {
 
     @Autowired
     private NotesRepository repository;

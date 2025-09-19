@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Notes.demo.Config.AppConstants;
 import com.Notes.demo.DTOs.NotesDTO;
 import com.Notes.demo.DTOs.NotesResponse;
+import com.Notes.demo.Model.Note;
 import com.Notes.demo.Service.NoteService;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -27,13 +29,19 @@ public class NoteContoller {
     @Autowired
     private NoteService noteService;
 
-    @PostMapping("/public/notes")
-    public ResponseEntity<NotesDTO> createNote(@Valid @RequestBody NotesDTO note){
-        NotesDTO newNote = noteService.createNote(note);
+    @PostMapping("/public/notes/{userId}")
+    public ResponseEntity<NotesDTO> createNote(@Valid @RequestBody NotesDTO note, @PathVariable Long userId){
+        NotesDTO newNote = noteService.createNote(note, userId);
         return new ResponseEntity<>(newNote, HttpStatus.CREATED);
 
 
         
+    }
+
+    @GetMapping("/public/notes/{userId}")
+    public ResponseEntity<List<Note>> getUserNotes(@PathVariable Long userId){
+        List<Note> response = noteService.findUsersNotes(userId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/public/notes")

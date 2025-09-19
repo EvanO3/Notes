@@ -16,7 +16,9 @@ import com.Notes.demo.DTOs.NotesResponse;
 import com.Notes.demo.Exceptions.APIExceptions;
 import com.Notes.demo.Exceptions.ResourceNotFound;
 import com.Notes.demo.Model.Note;
+import com.Notes.demo.Model.UsersAccount;
 import com.Notes.demo.Repository.NotesRepository;
+import com.Notes.demo.Repository.UserRepository;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -26,10 +28,11 @@ public class NoteServiceImpl implements NoteService {
     
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private UserRepository userRepository;
 
 
-
-    public NotesDTO createNote(NotesDTO notes){
+    public NotesDTO createNote(NotesDTO notes, Long userId){
         /*Map the incoming DTO to a the Notes class so its in the format we need to search the DB */
      Note mappedNote = modelMapper.map(notes, Note.class);
      System.out.println("Got here, this is mapped note: "+ mappedNote);
@@ -41,13 +44,19 @@ public class NoteServiceImpl implements NoteService {
         throw new APIExceptions("Note with title: " + savedNote.getTitle() + " already exists");
     }
     /*save the new note */
+    
+    //find the user given the id, mapp them to the note, realistally u should be using the dto but its okay
+    UsersAccount noteUser =userRepository.findById(userId).orElseThrow(() -> new APIExceptions("Failed to retrieve user with id:  " + userId));
+    mappedNote.setUser(noteUser);
+
+
     repository.save(mappedNote);
     NotesDTO newNote = modelMapper.map(mappedNote, NotesDTO.class);
 
     return newNote;
 
     
-        
+    
     }
 
 
@@ -84,6 +93,20 @@ public class NoteServiceImpl implements NoteService {
     }
 
 
+    @Override
+    public List<Note> findUsersNotes(Long userId) {
+       List<Note> notes = repository.findNoteByUserId(userId);
+
+
+       if(notes.isEmpty()){
+        throw new APIExceptions("Cannot find Users notes");
+       }
+
+    //    NotesResponse userNotes = modelMapper.map(notes, NotesResponse.class);
+
+       return notes;
+    }
+
 
 
     @Override
@@ -99,7 +122,10 @@ public class NoteServiceImpl implements NoteService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteNotes'");
     }
-    
+
+
+
+   
 
     
 }

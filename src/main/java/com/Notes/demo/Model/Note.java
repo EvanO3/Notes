@@ -5,10 +5,15 @@ import java.time.LocalDate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
@@ -34,6 +39,12 @@ public class Note {
 
     @CreationTimestamp
     private LocalDate createdAt;
+
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @JsonIgnore
+    private UsersAccount user;
 
 
 }

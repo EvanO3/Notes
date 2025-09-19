@@ -1,7 +1,10 @@
 package com.Notes.demo.Service;
 
-import com.Notes.demo.DTOs.UserDTO;
+import com.Notes.demo.DTOs.UsersAccountDTO;
+import com.Notes.demo.Model.UsersAccount;
 
 public interface UserService {
-     UserDTO createAccount(UserDTO user);
+      UsersAccountDTO createAccount(UsersAccountDTO user);
+
+      
 }
